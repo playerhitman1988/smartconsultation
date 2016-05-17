@@ -25,11 +25,51 @@
 		mongo-template-ref="mongoTemplate" />
 
 	<!-- MongoDB host -->
-	<mongo:mongo host="${mongo.host.name}" port="${mongo.host.port}" />
+	<!-- <mongo:mongo host="${mongo.host.name}" port="${mongo.host.port}" /> -->
 
 	<!-- Template for performing MongoDB operations -->
-	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate"
-		c:mongo-ref="mongo" c:databaseName="${mongo.db.name}" />
+	<!-- <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate" -->
+	<!-- c:mongo-ref="mongo" c:userCredentials-ref="userCredentials" c:databaseName="${mongo.db.name}" 
+		/> -->
+
+	<!-- <bean id="userCredentials" class="org.springframework.data.authentication.UserCredentials"> -->
+	<!-- <constructor-arg name="username" value="${mongo.user.name}" /> -->
+	<!-- <constructor-arg name="password" value="${mongo.user.password}" /> -->
+	<!-- </bean> -->
+
+
+	<!-- <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate"> -->
+	<!-- <constructor-arg name="mongo" ref="mongo" /> -->
+	<!-- <constructor-arg name="databaseName" value="${mongo.db.name}" /> -->
+	<!-- <constructor-arg name="userCredentials" ref="userCredentials" /> -->
+	<!-- <property name="writeConcern"> -->
+	<!-- <util:constant static-field="com.mongodb.WriteConcern.NORMAL" /> -->
+	<!-- </property> -->
+	<!-- </bean> -->
+
+
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongo" ref="mongo" />
+		<constructor-arg name="databaseName" value="${mongo.db.name}" />
+<!-- 		<constructor-arg name="userCredentials" ref="mongoCredentials" /> -->
+	</bean>
+
+<!-- 	<bean id="mongoCredentials" class="org.springframework.data.authentication.UserCredentials"> -->
+
+<!-- 		<constructor-arg name="username" value="#{mongo.user.name}" /> -->
+<!-- 		<constructor-arg name="password" -->
+<!-- 			value="#{new java.lang.String(mongo.user.password)}" /> -->
+<!-- 	</bean> -->
+
+	<bean class="com.mongodb.MongoURI" id="mongoURI">
+		<constructor-arg value="${mongodb.url}" />
+	</bean>
+
+	<bean class="com.mongodb.Mongo" id="mongo">
+		<constructor-arg ref="mongoURI" />
+	</bean>
+
+
 	<bean
 		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
